@@ -1,0 +1,48 @@
+#!/usr/bin/python3
+
+# todays date
+import time
+day = time.strftime("%d")
+month = time.strftime("%m")
+
+print('\r\nAnarchist of the Day (' + day + '/' + month +'):\r\n')
+
+# get anarchist of the day page
+from urllib.request import urlopen
+
+url = 'http://www.eskimo.com/~recall/bleed/'+ month + day +'.htm'
+response = urlopen(url)
+
+#soupify
+html = str(response.read())
+#print("HTML: \r\n")
+#print(html)
+
+testdiv = '<font color="ORANGE size="+2"><em>'
+testdiv2 = '<font color="ORANGE" size="+1"><em>'
+testdiv3 = '<font color="ORANGE"><font size="+3">'
+if testdiv in html:
+	divider = testdiv
+elif testdiv2 in html:
+	divider = testdiv2
+elif testdiv3 in html:
+	divider = testdiv3
+else:
+	exit('fail.')
+
+div = html.find(divider)
+text = html[div:]
+next_tag = '<em>'
+div = text.find(next_tag)
+text2 = text[div+len(next_tag):]
+end_tag = '<'
+text2 = text2.strip()
+print(text2[:text2.find(end_tag)].strip() + "\r\n")
+next_tag = '<br />'
+div = text2.find(next_tag)
+text3 = text2[div+len(next_tag):]
+end_tag = '</font>'
+text4 = text3[:text3.find(end_tag)]
+text4 = text4.replace('\\','')
+print(text4)
+print("\r\n")
